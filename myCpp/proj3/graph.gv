@@ -1,0 +1,11 @@
+digraph G {
+   "a11"->"a9"
+   "a9"->"a8"
+   "a11"->"a10"
+   "a11" [label="**"
+,color=orange, style=filled ,shape=triangle]
+   "a9" [label="-"
+,color=purple, style=filled ,shape=triangle]
+   "a8" [label="1",color=green, style=filled]
+   "a10" [label="3",color=green, style=filled]
+}

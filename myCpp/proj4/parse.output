@@ -1,0 +1,1289 @@
+Grammar
+
+    0 $accept: start $end
+
+    1 start: start funcdef
+    2      | %empty
+
+    3 funcdef: DEF IDENT LPAREN opt_id_list RPAREN COLON stmt END
+    4        | CR
+
+    5 opt_id_list: id_list
+    6            | %empty
+
+    7 id_list: IDENT COMMA id_list
+    8        | IDENT
+
+    9 opt_parm_list: parm_list
+
+   10 parm_list: expr COMMA parm_list
+   11          | expr
+   12          | %empty
+
+   13 stmt: line CR stmt
+   14     | selection CR stmt
+   15     | CR stmt
+   16     | %empty
+
+   17 selection: IF expr COLON stmt ELSE END
+   18          | IF expr COLON stmt ELSE COLON stmt END
+
+   19 line: IDENT ASSIGN expr
+   20     | IDENT LPAREN opt_parm_list RPAREN
+   21     | PRINT expr
+   22     | RETURN expr
+
+   23 expr: expr PLUS expr
+   24     | expr MINUS expr
+   25     | expr MULT expr
+   26     | expr EXPON expr
+   27     | expr DIV expr
+   28     | expr MOD expr
+   29     | expr LESS expr
+   30     | expr LESSEQ expr
+   31     | expr GREAT expr
+   32     | expr GREATEQ expr
+   33     | expr NOTEQ expr
+   34     | expr EQ expr
+   35     | MINUS expr
+   36     | NUMBER
+   37     | FLOAT
+   38     | IDENT
+   39     | IDENT LPAREN opt_parm_list RPAREN
+   40     | LPAREN expr RPAREN
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+CR (258) 4 13 14 15
+ASSIGN (259) 19
+PRINT (260) 21
+IDENT (261) 3 7 8 19 20 38 39
+NUMBER (262) 36
+FLOAT (263) 37
+LPAREN (264) 3 20 39 40
+RPAREN (265) 3 20 39 40
+DEF (266) 3
+COLON (267) 3 17 18
+COMMA (268) 7 10
+IF (269) 17 18
+END (270) 3 17 18
+ELSE (271) 17 18
+RETURN (272) 22
+LESS (273) 29
+LESSEQ (274) 30
+GREAT (275) 31
+GREATEQ (276) 32
+EQ (277) 34
+NOTEQ (278) 33
+PLUS (279) 23
+MINUS (280) 24 35
+MULT (281) 25
+DIV (282) 27
+MOD (283) 28
+EXPON (284) 26
+
+
+Nonterminals, with rules where they appear
+
+$accept (30)
+    on left: 0
+start (31)
+    on left: 1 2, on right: 0 1
+funcdef (32)
+    on left: 3 4, on right: 1
+opt_id_list (33)
+    on left: 5 6, on right: 3
+id_list (34)
+    on left: 7 8, on right: 5 7
+opt_parm_list (35)
+    on left: 9, on right: 20 39
+parm_list (36)
+    on left: 10 11 12, on right: 9 10
+stmt (37)
+    on left: 13 14 15 16, on right: 3 13 14 15 17 18
+selection (38)
+    on left: 17 18, on right: 14
+line (39)
+    on left: 19 20 21 22, on right: 13
+expr (40)
+    on left: 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40,
+    on right: 10 11 17 18 19 21 22 23 24 25 26 27 28 29 30 31 32 33
+    34 35 40
+
+
+State 0
+
+    0 $accept: . start $end
+
+    $default  reduce using rule 2 (start)
+
+    start  go to state 1
+
+
+State 1
+
+    0 $accept: start . $end
+    1 start: start . funcdef
+
+    $end  shift, and go to state 2
+    CR    shift, and go to state 3
+    DEF   shift, and go to state 4
+
+    funcdef  go to state 5
+
+
+State 2
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 3
+
+    4 funcdef: CR .
+
+    $default  reduce using rule 4 (funcdef)
+
+
+State 4
+
+    3 funcdef: DEF . IDENT LPAREN opt_id_list RPAREN COLON stmt END
+
+    IDENT  shift, and go to state 6
+
+
+State 5
+
+    1 start: start funcdef .
+
+    $default  reduce using rule 1 (start)
+
+
+State 6
+
+    3 funcdef: DEF IDENT . LPAREN opt_id_list RPAREN COLON stmt END
+
+    LPAREN  shift, and go to state 7
+
+
+State 7
+
+    3 funcdef: DEF IDENT LPAREN . opt_id_list RPAREN COLON stmt END
+
+    IDENT  shift, and go to state 8
+
+    $default  reduce using rule 6 (opt_id_list)
+
+    opt_id_list  go to state 9
+    id_list      go to state 10
+
+
+State 8
+
+    7 id_list: IDENT . COMMA id_list
+    8        | IDENT .
+
+    COMMA  shift, and go to state 11
+
+    $default  reduce using rule 8 (id_list)
+
+
+State 9
+
+    3 funcdef: DEF IDENT LPAREN opt_id_list . RPAREN COLON stmt END
+
+    RPAREN  shift, and go to state 12
+
+
+State 10
+
+    5 opt_id_list: id_list .
+
+    $default  reduce using rule 5 (opt_id_list)
+
+
+State 11
+
+    7 id_list: IDENT COMMA . id_list
+
+    IDENT  shift, and go to state 8
+
+    id_list  go to state 13
+
+
+State 12
+
+    3 funcdef: DEF IDENT LPAREN opt_id_list RPAREN . COLON stmt END
+
+    COLON  shift, and go to state 14
+
+
+State 13
+
+    7 id_list: IDENT COMMA id_list .
+
+    $default  reduce using rule 7 (id_list)
+
+
+State 14
+
+    3 funcdef: DEF IDENT LPAREN opt_id_list RPAREN COLON . stmt END
+
+    CR      shift, and go to state 15
+    PRINT   shift, and go to state 16
+    IDENT   shift, and go to state 17
+    IF      shift, and go to state 18
+    RETURN  shift, and go to state 19
+
+    $default  reduce using rule 16 (stmt)
+
+    stmt       go to state 20
+    selection  go to state 21
+    line       go to state 22
+
+
+State 15
+
+   15 stmt: CR . stmt
+
+    CR      shift, and go to state 15
+    PRINT   shift, and go to state 16
+    IDENT   shift, and go to state 17
+    IF      shift, and go to state 18
+    RETURN  shift, and go to state 19
+
+    $default  reduce using rule 16 (stmt)
+
+    stmt       go to state 23
+    selection  go to state 21
+    line       go to state 22
+
+
+State 16
+
+   21 line: PRINT . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 29
+
+
+State 17
+
+   19 line: IDENT . ASSIGN expr
+   20     | IDENT . LPAREN opt_parm_list RPAREN
+
+    ASSIGN  shift, and go to state 30
+    LPAREN  shift, and go to state 31
+
+
+State 18
+
+   17 selection: IF . expr COLON stmt ELSE END
+   18          | IF . expr COLON stmt ELSE COLON stmt END
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 32
+
+
+State 19
+
+   22 line: RETURN . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 33
+
+
+State 20
+
+    3 funcdef: DEF IDENT LPAREN opt_id_list RPAREN COLON stmt . END
+
+    END  shift, and go to state 34
+
+
+State 21
+
+   14 stmt: selection . CR stmt
+
+    CR  shift, and go to state 35
+
+
+State 22
+
+   13 stmt: line . CR stmt
+
+    CR  shift, and go to state 36
+
+
+State 23
+
+   15 stmt: CR stmt .
+
+    $default  reduce using rule 15 (stmt)
+
+
+State 24
+
+   38 expr: IDENT .
+   39     | IDENT . LPAREN opt_parm_list RPAREN
+
+    LPAREN  shift, and go to state 37
+
+    $default  reduce using rule 38 (expr)
+
+
+State 25
+
+   36 expr: NUMBER .
+
+    $default  reduce using rule 36 (expr)
+
+
+State 26
+
+   37 expr: FLOAT .
+
+    $default  reduce using rule 37 (expr)
+
+
+State 27
+
+   40 expr: LPAREN . expr RPAREN
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 38
+
+
+State 28
+
+   35 expr: MINUS . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 39
+
+
+State 29
+
+   21 line: PRINT expr .
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    LESS     shift, and go to state 40
+    LESSEQ   shift, and go to state 41
+    GREAT    shift, and go to state 42
+    GREATEQ  shift, and go to state 43
+    EQ       shift, and go to state 44
+    NOTEQ    shift, and go to state 45
+    PLUS     shift, and go to state 46
+    MINUS    shift, and go to state 47
+    MULT     shift, and go to state 48
+    DIV      shift, and go to state 49
+    MOD      shift, and go to state 50
+    EXPON    shift, and go to state 51
+
+    $default  reduce using rule 21 (line)
+
+
+State 30
+
+   19 line: IDENT ASSIGN . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 52
+
+
+State 31
+
+   20 line: IDENT LPAREN . opt_parm_list RPAREN
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    $default  reduce using rule 12 (parm_list)
+
+    opt_parm_list  go to state 53
+    parm_list      go to state 54
+    expr           go to state 55
+
+
+State 32
+
+   17 selection: IF expr . COLON stmt ELSE END
+   18          | IF expr . COLON stmt ELSE COLON stmt END
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    COLON    shift, and go to state 56
+    LESS     shift, and go to state 40
+    LESSEQ   shift, and go to state 41
+    GREAT    shift, and go to state 42
+    GREATEQ  shift, and go to state 43
+    EQ       shift, and go to state 44
+    NOTEQ    shift, and go to state 45
+    PLUS     shift, and go to state 46
+    MINUS    shift, and go to state 47
+    MULT     shift, and go to state 48
+    DIV      shift, and go to state 49
+    MOD      shift, and go to state 50
+    EXPON    shift, and go to state 51
+
+
+State 33
+
+   22 line: RETURN expr .
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    LESS     shift, and go to state 40
+    LESSEQ   shift, and go to state 41
+    GREAT    shift, and go to state 42
+    GREATEQ  shift, and go to state 43
+    EQ       shift, and go to state 44
+    NOTEQ    shift, and go to state 45
+    PLUS     shift, and go to state 46
+    MINUS    shift, and go to state 47
+    MULT     shift, and go to state 48
+    DIV      shift, and go to state 49
+    MOD      shift, and go to state 50
+    EXPON    shift, and go to state 51
+
+    $default  reduce using rule 22 (line)
+
+
+State 34
+
+    3 funcdef: DEF IDENT LPAREN opt_id_list RPAREN COLON stmt END .
+
+    $default  reduce using rule 3 (funcdef)
+
+
+State 35
+
+   14 stmt: selection CR . stmt
+
+    CR      shift, and go to state 15
+    PRINT   shift, and go to state 16
+    IDENT   shift, and go to state 17
+    IF      shift, and go to state 18
+    RETURN  shift, and go to state 19
+
+    $default  reduce using rule 16 (stmt)
+
+    stmt       go to state 57
+    selection  go to state 21
+    line       go to state 22
+
+
+State 36
+
+   13 stmt: line CR . stmt
+
+    CR      shift, and go to state 15
+    PRINT   shift, and go to state 16
+    IDENT   shift, and go to state 17
+    IF      shift, and go to state 18
+    RETURN  shift, and go to state 19
+
+    $default  reduce using rule 16 (stmt)
+
+    stmt       go to state 58
+    selection  go to state 21
+    line       go to state 22
+
+
+State 37
+
+   39 expr: IDENT LPAREN . opt_parm_list RPAREN
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    $default  reduce using rule 12 (parm_list)
+
+    opt_parm_list  go to state 59
+    parm_list      go to state 54
+    expr           go to state 55
+
+
+State 38
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+   40     | LPAREN expr . RPAREN
+
+    RPAREN   shift, and go to state 60
+    LESS     shift, and go to state 40
+    LESSEQ   shift, and go to state 41
+    GREAT    shift, and go to state 42
+    GREATEQ  shift, and go to state 43
+    EQ       shift, and go to state 44
+    NOTEQ    shift, and go to state 45
+    PLUS     shift, and go to state 46
+    MINUS    shift, and go to state 47
+    MULT     shift, and go to state 48
+    DIV      shift, and go to state 49
+    MOD      shift, and go to state 50
+    EXPON    shift, and go to state 51
+
+
+State 39
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+   35     | MINUS expr .
+
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 35 (expr)
+
+
+State 40
+
+   29 expr: expr LESS . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 61
+
+
+State 41
+
+   30 expr: expr LESSEQ . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 62
+
+
+State 42
+
+   31 expr: expr GREAT . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 63
+
+
+State 43
+
+   32 expr: expr GREATEQ . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 64
+
+
+State 44
+
+   34 expr: expr EQ . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 65
+
+
+State 45
+
+   33 expr: expr NOTEQ . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 66
+
+
+State 46
+
+   23 expr: expr PLUS . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 67
+
+
+State 47
+
+   24 expr: expr MINUS . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 68
+
+
+State 48
+
+   25 expr: expr MULT . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 69
+
+
+State 49
+
+   27 expr: expr DIV . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 70
+
+
+State 50
+
+   28 expr: expr MOD . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 71
+
+
+State 51
+
+   26 expr: expr EXPON . expr
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    expr  go to state 72
+
+
+State 52
+
+   19 line: IDENT ASSIGN expr .
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    LESS     shift, and go to state 40
+    LESSEQ   shift, and go to state 41
+    GREAT    shift, and go to state 42
+    GREATEQ  shift, and go to state 43
+    EQ       shift, and go to state 44
+    NOTEQ    shift, and go to state 45
+    PLUS     shift, and go to state 46
+    MINUS    shift, and go to state 47
+    MULT     shift, and go to state 48
+    DIV      shift, and go to state 49
+    MOD      shift, and go to state 50
+    EXPON    shift, and go to state 51
+
+    $default  reduce using rule 19 (line)
+
+
+State 53
+
+   20 line: IDENT LPAREN opt_parm_list . RPAREN
+
+    RPAREN  shift, and go to state 73
+
+
+State 54
+
+    9 opt_parm_list: parm_list .
+
+    $default  reduce using rule 9 (opt_parm_list)
+
+
+State 55
+
+   10 parm_list: expr . COMMA parm_list
+   11          | expr .
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    COMMA    shift, and go to state 74
+    LESS     shift, and go to state 40
+    LESSEQ   shift, and go to state 41
+    GREAT    shift, and go to state 42
+    GREATEQ  shift, and go to state 43
+    EQ       shift, and go to state 44
+    NOTEQ    shift, and go to state 45
+    PLUS     shift, and go to state 46
+    MINUS    shift, and go to state 47
+    MULT     shift, and go to state 48
+    DIV      shift, and go to state 49
+    MOD      shift, and go to state 50
+    EXPON    shift, and go to state 51
+
+    $default  reduce using rule 11 (parm_list)
+
+
+State 56
+
+   17 selection: IF expr COLON . stmt ELSE END
+   18          | IF expr COLON . stmt ELSE COLON stmt END
+
+    CR      shift, and go to state 15
+    PRINT   shift, and go to state 16
+    IDENT   shift, and go to state 17
+    IF      shift, and go to state 18
+    RETURN  shift, and go to state 19
+
+    $default  reduce using rule 16 (stmt)
+
+    stmt       go to state 75
+    selection  go to state 21
+    line       go to state 22
+
+
+State 57
+
+   14 stmt: selection CR stmt .
+
+    $default  reduce using rule 14 (stmt)
+
+
+State 58
+
+   13 stmt: line CR stmt .
+
+    $default  reduce using rule 13 (stmt)
+
+
+State 59
+
+   39 expr: IDENT LPAREN opt_parm_list . RPAREN
+
+    RPAREN  shift, and go to state 76
+
+
+State 60
+
+   40 expr: LPAREN expr RPAREN .
+
+    $default  reduce using rule 40 (expr)
+
+
+State 61
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   29     | expr LESS expr .
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 29 (expr)
+
+
+State 62
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   30     | expr LESSEQ expr .
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 30 (expr)
+
+
+State 63
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   31     | expr GREAT expr .
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 31 (expr)
+
+
+State 64
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   32     | expr GREATEQ expr .
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 32 (expr)
+
+
+State 65
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+   34     | expr EQ expr .
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 34 (expr)
+
+
+State 66
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   33     | expr NOTEQ expr .
+   34     | expr . EQ expr
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 33 (expr)
+
+
+State 67
+
+   23 expr: expr . PLUS expr
+   23     | expr PLUS expr .
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 23 (expr)
+
+
+State 68
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   24     | expr MINUS expr .
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    MOD    shift, and go to state 50
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 24 (expr)
+
+
+State 69
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   25     | expr MULT expr .
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 25 (expr)
+
+
+State 70
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   27     | expr DIV expr .
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 27 (expr)
+
+
+State 71
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   28     | expr MOD expr .
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    EXPON  shift, and go to state 51
+
+    $default  reduce using rule 28 (expr)
+
+
+State 72
+
+   23 expr: expr . PLUS expr
+   24     | expr . MINUS expr
+   25     | expr . MULT expr
+   26     | expr . EXPON expr
+   26     | expr EXPON expr .
+   27     | expr . DIV expr
+   28     | expr . MOD expr
+   29     | expr . LESS expr
+   30     | expr . LESSEQ expr
+   31     | expr . GREAT expr
+   32     | expr . GREATEQ expr
+   33     | expr . NOTEQ expr
+   34     | expr . EQ expr
+
+    $default  reduce using rule 26 (expr)
+
+
+State 73
+
+   20 line: IDENT LPAREN opt_parm_list RPAREN .
+
+    $default  reduce using rule 20 (line)
+
+
+State 74
+
+   10 parm_list: expr COMMA . parm_list
+
+    IDENT   shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    FLOAT   shift, and go to state 26
+    LPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 28
+
+    $default  reduce using rule 12 (parm_list)
+
+    parm_list  go to state 77
+    expr       go to state 55
+
+
+State 75
+
+   17 selection: IF expr COLON stmt . ELSE END
+   18          | IF expr COLON stmt . ELSE COLON stmt END
+
+    ELSE  shift, and go to state 78
+
+
+State 76
+
+   39 expr: IDENT LPAREN opt_parm_list RPAREN .
+
+    $default  reduce using rule 39 (expr)
+
+
+State 77
+
+   10 parm_list: expr COMMA parm_list .
+
+    $default  reduce using rule 10 (parm_list)
+
+
+State 78
+
+   17 selection: IF expr COLON stmt ELSE . END
+   18          | IF expr COLON stmt ELSE . COLON stmt END
+
+    COLON  shift, and go to state 79
+    END    shift, and go to state 80
+
+
+State 79
+
+   18 selection: IF expr COLON stmt ELSE COLON . stmt END
+
+    CR      shift, and go to state 15
+    PRINT   shift, and go to state 16
+    IDENT   shift, and go to state 17
+    IF      shift, and go to state 18
+    RETURN  shift, and go to state 19
+
+    $default  reduce using rule 16 (stmt)
+
+    stmt       go to state 81
+    selection  go to state 21
+    line       go to state 22
+
+
+State 80
+
+   17 selection: IF expr COLON stmt ELSE END .
+
+    $default  reduce using rule 17 (selection)
+
+
+State 81
+
+   18 selection: IF expr COLON stmt ELSE COLON stmt . END
+
+    END  shift, and go to state 82
+
+
+State 82
+
+   18 selection: IF expr COLON stmt ELSE COLON stmt END .
+
+    $default  reduce using rule 18 (selection)
